@@ -7,7 +7,7 @@ This lab demostrates how kube-scheduler works with kube-controller-manager and k
 - pause kube-controller-manager
     ```console
     $ docker pause $(docker ps | grep controller-manager | grep -v pause | awk '{print $1}')
-    ```console
+    ```
 
 - pause kube-scheduler
     ```console
@@ -50,3 +50,5 @@ pause-77cdbd74df-j48pk   1/1       Running   0         2m        192.168.2.64   
 ```
 
 This indicates scheduler starts to work - schedule `Pending` pod to a node.
+
+## Create pod with `nodeName` manually set

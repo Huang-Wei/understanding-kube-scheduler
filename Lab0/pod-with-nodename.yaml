@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: lab0-0
+  name: lab0-1
 spec:
   replicas: 1
   selector:
@@ -12,6 +12,7 @@ spec:
       labels:
         app: pause
     spec:
+      nodeName: xyz
       containers:
       - name: pause
         image: k8s.gcr.io/pause
