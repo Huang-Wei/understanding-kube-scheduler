@@ -1,0 +1,62 @@
+diff --git a/pkg/scheduler/algorithmprovider/defaults/defaults.go b/pkg/scheduler/algorithmprovider/defaults/defaults.go
+index 6b18c4f..ca02d03 100644
+--- a/pkg/scheduler/algorithmprovider/defaults/defaults.go
++++ b/pkg/scheduler/algorithmprovider/defaults/defaults.go
+@@ -95,7 +95,7 @@ func init() {
+ 	// but do not include it as part of the default priorities
+ 	factory.RegisterPriorityFunction2("EqualPriority", core.EqualPriorityMap, nil, 1)
+ 	// Optional, cluster-autoscaler friendly priority function - give used nodes higher priority.
+-	factory.RegisterPriorityFunction2("MostRequestedPriority", priorities.MostRequestedPriorityMap, nil, 1)
++	factory.RegisterPriorityFunction2("MostRequestedPriority", priorities.MostRequestedPriorityMap, nil, 200)
+ 	factory.RegisterPriorityFunction2(
+ 		"RequestedToCapacityRatioPriority",
+ 		priorities.RequestedToCapacityRatioResourceAllocationPriorityDefault().PriorityMap,
+@@ -248,7 +248,8 @@ func defaultPriorities() sets.String {
+ 		),
+ 
+ 		// Prioritize nodes by least requested utilization.
+-		factory.RegisterPriorityFunction2("LeastRequestedPriority", priorities.LeastRequestedPriorityMap, nil, 1),
++		// factory.RegisterPriorityFunction2("LeastRequestedPriority", priorities.LeastRequestedPriorityMap, nil, 1),
++		factory.RegisterPriorityFunction2("MostRequestedPriority", priorities.MostRequestedPriorityMap, nil, 200),
+ 
+ 		// Prioritizes nodes to help achieve balanced resource usage
+ 		factory.RegisterPriorityFunction2("BalancedResourceAllocation", priorities.BalancedResourceAllocationMap, nil, 1),
+@@ -264,7 +265,7 @@ func defaultPriorities() sets.String {
+ 		factory.RegisterPriorityFunction2("TaintTolerationPriority", priorities.ComputeTaintTolerationPriorityMap, priorities.ComputeTaintTolerationPriorityReduce, 1),
+ 
+ 		// ImageLocalityPriority prioritizes nodes that have images requested by the pod present.
+-		factory.RegisterPriorityFunction2("ImageLocalityPriority", priorities.ImageLocalityPriorityMap, nil, 1),
++		factory.RegisterPriorityFunction2("ImageLocalityPriority", priorities.ImageLocalityPriorityMap, nil, 2000),
+ 	)
+ }
+ 
+diff --git a/pkg/scheduler/core/generic_scheduler.go b/pkg/scheduler/core/generic_scheduler.go
+index 1ab9e57..3161039 100644
+--- a/pkg/scheduler/core/generic_scheduler.go
++++ b/pkg/scheduler/core/generic_scheduler.go
+@@ -675,10 +675,8 @@ func PrioritizeNodes(
+ 			if err := config.Reduce(pod, meta, nodeNameToInfo, results[index]); err != nil {
+ 				appendError(err)
+ 			}
+-			if glog.V(10) {
+-				for _, hostPriority := range results[index] {
+-					glog.Infof("%v -> %v: %v, Score: (%d)", pod.Name, hostPriority.Host, config.Name, hostPriority.Score)
+-				}
++			for _, hostPriority := range results[index] {
++				glog.V(1).Infof("%v -> %v: %v, Score: (%d)\n", pod.Name, hostPriority.Host, config.Name, hostPriority.Score)
+ 			}
+ 		}(i, priorityConfig)
+ 	}
+@@ -727,10 +725,8 @@ func PrioritizeNodes(
+ 		}
+ 	}
+ 
+-	if glog.V(10) {
+-		for i := range result {
+-			glog.V(10).Infof("Host %s => Score %d", result[i].Host, result[i].Score)
+-		}
++	for i := range result {
++		glog.V(1).Infof("Host %s => Score %d\n", result[i].Host, result[i].Score)
+ 	}
+ 	return result, nil
+ }

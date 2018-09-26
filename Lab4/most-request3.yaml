@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lab4-3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pause3
+  template:
+    metadata:
+      labels:
+        app: pause3
+    spec:
+      containers:
+      - name: pause
+        image: k8s.gcr.io/pause
+        resources:
+          requests:
+            cpu: 2
+          limits:
+            cpu: 2

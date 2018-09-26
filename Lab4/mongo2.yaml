@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lab4-5
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo2
+  template:
+    metadata:
+      labels:
+        app: mongo2
+    spec:
+      containers:
+      - name: mongo
+        image: mongo:4
+        imagePullPolicy: IfNotPresent
