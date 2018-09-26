@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lab3-2
+spec:
+  priorityClassName: p2
+  containers:
+  - name: pause
+    image: k8s.gcr.io/pause
+    resources:
+      requests:
+        ibm.com/gpu: 1
+      limits:
+        ibm.com/gpu: 1

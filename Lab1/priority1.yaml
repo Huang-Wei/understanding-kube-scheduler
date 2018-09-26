@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lab1-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pause1
+  template:
+    metadata:
+      labels:
+        app: pause1
+    spec:
+      priorityClassName: p1
+      containers:
+      - name: pause
+        image: k8s.gcr.io/pause
+        resources:
+          requests:
+            # ibm.com/gpu: 1
+            cpu: 2
+          limits:
+            # ibm.com/gpu: 1
+            cpu: 2

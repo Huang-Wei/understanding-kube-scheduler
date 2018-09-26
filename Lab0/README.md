@@ -51,4 +51,4 @@ pause-77cdbd74df-j48pk   1/1       Running   0         2m        192.168.2.64   
 
 This indicates scheduler starts to work - schedule `Pending` pod to a node.
 
-## Create pod with `nodeName` manually set
+## Create a Pod with `nodeName` manually set

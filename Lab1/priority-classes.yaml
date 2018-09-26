@@ -1,0 +1,31 @@
+apiVersion: scheduling.k8s.io/v1beta1
+kind: PriorityClass
+metadata:
+  name: p1
+value: 1
+globalDefault: false
+description: "Priority p1 of value 1."
+---
+apiVersion: scheduling.k8s.io/v1beta1
+kind: PriorityClass
+metadata:
+  name: p2
+value: 2
+globalDefault: false
+description: "Priority p2 of value 2."
+---
+apiVersion: scheduling.k8s.io/v1beta1
+kind: PriorityClass
+metadata:
+  name: p3
+value: 3
+globalDefault: false
+description: "Priority p3 of value 3."
+---
+apiVersion: scheduling.k8s.io/v1beta1
+kind: PriorityClass
+metadata:
+  name: p4
+value: 4
+globalDefault: false
+description: "Priority p4 of value 4."
