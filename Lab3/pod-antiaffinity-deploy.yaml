@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lab3-2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pause2
+  template:
+    metadata:
+      labels:
+        app: pause2
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - pause1
+            topologyKey: zone
+            # topologyKey: region
+      containers:
+      - name: pause
+        image: k8s.gcr.io/pause
